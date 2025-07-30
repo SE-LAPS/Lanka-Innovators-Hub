@@ -21,7 +21,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <img 
-              src="/images/img_header_logo.png" 
+              src="/images/Nav.png" 
               alt="Lanka Innovators Hub" 
               className="w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] lg:w-[140px] lg:h-[42px]"
             />
