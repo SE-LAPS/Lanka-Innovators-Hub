@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
@@ -102,74 +102,119 @@ const ApplicationForm = () => {
   // Track validation errors
   const [validationError, setValidationError] = useState('');
 
+  // Utility function to update completed steps based on validation
+  const updateCompletedSteps = () => {
+    const newCompletedSteps = [];
+    for (let step = 1; step <= totalSteps; step++) {
+      if (step < currentStep && validateStep(step)) {
+        newCompletedSteps.push(step);
+      }
+    }
+    setCompletedSteps(newCompletedSteps);
+  };
+
+  // Ensure clean state on component mount
+  useEffect(() => {
+    // Reset validation state on mount to ensure clean initial state
+    setValidationError('');
+    setCompletedSteps([]);
+  }, []);
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear validation errors when user starts typing
+    if (validationError) {
+      setValidationError('');
+    }
   };
 
   // Handle checkbox changes
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData({ ...formData, [name]: checked });
+    // Clear validation errors when user makes changes
+    if (validationError) {
+      setValidationError('');
+    }
   };
 
   // Handle array field changes (checkbox groups)
   const handleArrayChange = (name, values) => {
     setFormData({ ...formData, [name]: values });
+    // Clear validation errors when user makes changes
+    if (validationError) {
+      setValidationError('');
+    }
   };
 
   // Validation functions for each step
   const validateStep = (stepNumber) => {
+    // Safety check: ensure formData exists and is properly initialized
+    if (!formData || typeof formData !== 'object') {
+      return false;
+    }
+    
+    // Helper function to check if a field is properly filled
+    const isFieldFilled = (field) => {
+      return field && typeof field === 'string' && field.trim() !== '';
+    };
+    
+    // Helper function to check if an array field has items
+    const isArrayFilled = (arr) => {
+      return Array.isArray(arr) && arr.length > 0;
+    };
+    
     switch (stepNumber) {
       case 1: // Applicant Details
-        return formData.firstName.trim() !== '' && 
-               formData.lastName.trim() !== '' && 
-               formData.jobTitle.trim() !== '' && 
-               formData.email.trim() !== '' && 
-               formData.phone.trim() !== '';
+        return isFieldFilled(formData.firstName) && 
+               isFieldFilled(formData.lastName) && 
+               isFieldFilled(formData.jobTitle) && 
+               isFieldFilled(formData.email) && 
+               isFieldFilled(formData.phone);
       
       case 2: // Your Startup
-        return formData.startupName.trim() !== '' && 
-               formData.description.trim() !== '' && 
-               formData.incorporationDate.trim() !== '' && 
-               formData.location.trim() !== '' && 
-               formData.registrationNumber.trim() !== '' && 
-               formData.industries.length > 0 && 
-               formData.pitchDeck.trim() !== '';
+        return isFieldFilled(formData.startupName) && 
+               isFieldFilled(formData.description) && 
+               isFieldFilled(formData.incorporationDate) && 
+               isFieldFilled(formData.location) && 
+               isFieldFilled(formData.registrationNumber) && 
+               isArrayFilled(formData.industries) && 
+               isFieldFilled(formData.pitchDeck);
       
       case 3: // Your Solution and Impact
-        return formData.problem.trim() !== '' && 
-               formData.uniqueness.trim() !== '' && 
-               formData.idea.trim() !== '';
+        return isFieldFilled(formData.problem) && 
+               isFieldFilled(formData.uniqueness) && 
+               isFieldFilled(formData.idea);
       
       case 4: // Market, Users & Progress
-        return formData.mvpLaunchDate.trim() !== '' && 
-               formData.targetCustomers.trim() !== '' && 
-               formData.traction.trim() !== '' && 
-               formData.revenueModel.trim() !== '' && 
-               formData.competitors.trim() !== '';
+        return isFieldFilled(formData.mvpLaunchDate) && 
+               isFieldFilled(formData.targetCustomers) && 
+               isFieldFilled(formData.traction) && 
+               isFieldFilled(formData.revenueModel) && 
+               isFieldFilled(formData.competitors);
       
       case 5: // The Team
-        return formData.teamInfo.trim() !== '' && 
-               formData.totalCoFounders.trim() !== '' && 
-               formData.femaleFounders.trim() !== '' && 
-               formData.maleFounders.trim() !== '' && 
-               formData.nonBinaryFounders.trim() !== '';
+        return isFieldFilled(formData.teamInfo) && 
+               isFieldFilled(formData.totalCoFounders) && 
+               isFieldFilled(formData.femaleFounders) && 
+               isFieldFilled(formData.maleFounders) && 
+               isFieldFilled(formData.nonBinaryFounders);
       
       case 6: // Funding & Ownership
-        return formData.ownershipStructure.trim() !== '' && 
-               formData.coFoundersOwnership.trim() !== '' && 
-               formData.equityFunding.trim() !== '' && 
-               formData.nonEquityFunding.trim() !== '' && 
-               formData.seekingInvestment.trim() !== '' && 
-               formData.runway.trim() !== '' && 
-               formData.seedCapital.trim() !== '';
+        return isFieldFilled(formData.ownershipStructure) && 
+               isFieldFilled(formData.coFoundersOwnership) && 
+               isFieldFilled(formData.equityFunding) && 
+               isFieldFilled(formData.nonEquityFunding) && 
+               isFieldFilled(formData.seekingInvestment) && 
+               isFieldFilled(formData.runway) && 
+               isFieldFilled(formData.seedCapital);
       
       case 7: // Final Questions
-        return formData.shareData.trim() !== '' && 
-               formData.heardFrom.trim() !== '' && 
-               formData.programExpectations.trim() !== '' &&
+        return isFieldFilled(formData.shareData) && 
+               isFieldFilled(formData.heardFrom) && 
+               isFieldFilled(formData.programExpectations) &&
                formData.dataConsent === true;
       
       default:
@@ -177,20 +222,108 @@ const ApplicationForm = () => {
     }
   };
 
-  // Navigate to next step
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
+  // Get missing required fields for better validation feedback
+  const getMissingFields = (stepNumber) => {
+    const missing = [];
+    
+    switch (stepNumber) {
+      case 1: // Applicant Details
+        if (!formData.firstName || formData.firstName.trim() === '') missing.push('First Name');
+        if (!formData.lastName || formData.lastName.trim() === '') missing.push('Last Name');
+        if (!formData.jobTitle || formData.jobTitle.trim() === '') missing.push('Job Title');
+        if (!formData.email || formData.email.trim() === '') missing.push('Email');
+        if (!formData.phone || formData.phone.trim() === '') missing.push('Phone');
+        break;
+      case 2: // Your Startup
+        if (!formData.startupName || formData.startupName.trim() === '') missing.push('Startup Name');
+        if (!formData.description || formData.description.trim() === '') missing.push('Startup Description');
+        if (!formData.incorporationDate || formData.incorporationDate.trim() === '') missing.push('Incorporation Date');
+        if (!formData.location || formData.location.trim() === '') missing.push('Location');
+        if (!formData.registrationNumber || formData.registrationNumber.trim() === '') missing.push('Registration Number');
+        if (!formData.industries || formData.industries.length === 0) missing.push('Primary Industry');
+        if (!formData.pitchDeck || formData.pitchDeck.trim() === '') missing.push('Pitch Deck');
+        break;
+      case 3: // Your Solution and Impact
+        if (!formData.problem || formData.problem.trim() === '') missing.push('Problem Description');
+        if (!formData.uniqueness || formData.uniqueness.trim() === '') missing.push('Solution Uniqueness');
+        if (!formData.idea || formData.idea.trim() === '') missing.push('Idea Origin');
+        break;
+      case 4: // Market, Users & Progress
+        if (!formData.mvpLaunchDate || formData.mvpLaunchDate.trim() === '') missing.push('MVP Launch Date');
+        if (!formData.targetCustomers || formData.targetCustomers.trim() === '') missing.push('Target Customers');
+        if (!formData.traction || formData.traction.trim() === '') missing.push('Traction');
+        if (!formData.revenueModel || formData.revenueModel.trim() === '') missing.push('Revenue Model');
+        if (!formData.competitors || formData.competitors.trim() === '') missing.push('Competitors');
+        break;
+      case 5: // The Team
+        if (!formData.teamInfo || formData.teamInfo.trim() === '') missing.push('Team Information');
+        if (!formData.totalCoFounders || formData.totalCoFounders.trim() === '') missing.push('Total Co-founders');
+        if (!formData.femaleFounders || formData.femaleFounders.trim() === '') missing.push('Female Founders');
+        if (!formData.maleFounders || formData.maleFounders.trim() === '') missing.push('Male Founders');
+        if (!formData.nonBinaryFounders || formData.nonBinaryFounders.trim() === '') missing.push('Non-binary Founders');
+        break;
+      case 6: // Funding & Ownership
+        if (!formData.ownershipStructure || formData.ownershipStructure.trim() === '') missing.push('Ownership Structure');
+        if (!formData.coFoundersOwnership || formData.coFoundersOwnership.trim() === '') missing.push('Co-founders Ownership');
+        if (!formData.equityFunding || formData.equityFunding.trim() === '') missing.push('Equity Funding');
+        if (!formData.nonEquityFunding || formData.nonEquityFunding.trim() === '') missing.push('Non-equity Funding');
+        if (!formData.seekingInvestment || formData.seekingInvestment.trim() === '') missing.push('Seeking Investment');
+        if (!formData.runway || formData.runway.trim() === '') missing.push('Current Runway');
+        if (!formData.seedCapital || formData.seedCapital.trim() === '') missing.push('Seed Capital Interest');
+        break;
+      case 7: // Final Questions
+        if (!formData.shareData || formData.shareData.trim() === '') missing.push('Share Data Permission');
+        if (!formData.heardFrom || formData.heardFrom.trim() === '') missing.push('How You Heard About Us');
+        if (!formData.programExpectations || formData.programExpectations.trim() === '') missing.push('Program Expectations');
+        if (!formData.dataConsent) missing.push('Data Consent');
+        break;
+    }
+    
+    return missing;
+  };
+
+  // Navigate to next step with improved validation
+  const nextStep = (e) => {
+    // Prevent any default behavior
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Defensive check: ensure we're on a valid step
+    if (currentStep < 1 || currentStep > totalSteps) {
+      console.error('Invalid current step:', currentStep);
+      return;
+    }
+    
+    // First, always remove current step from completed steps to ensure clean state
+    const cleanedCompletedSteps = completedSteps.filter(step => step !== currentStep);
+    
+    // Run validation with double-check
+    const isValid = validateStep(currentStep);
+    const missingFields = getMissingFields(currentStep);
+    
+    // Additional safety check: if we have missing fields, validation should fail
+    const hasRequiredData = missingFields.length === 0;
+    const finalValidation = isValid && hasRequiredData;
+    
+    if (finalValidation) {
       // Clear any validation errors
       setValidationError('');
-      // Mark current step as completed
-      if (!completedSteps.includes(currentStep)) {
-        setCompletedSteps([...completedSteps, currentStep]);
-      }
+      // Mark current step as completed only after successful validation
+      setCompletedSteps([...cleanedCompletedSteps, currentStep]);
       setCurrentStep(currentStep + 1);
       window.scrollTo(0, 0);
     } else {
-      // Show validation error
-      setValidationError('Please fill in all required fields marked with * before proceeding to the next step.');
+      // Always show validation error if validation fails
+      if (missingFields.length > 0) {
+        setValidationError(`Please fill in the following required fields: ${missingFields.join(', ')}`);
+      } else {
+        setValidationError('Please fill in all required fields marked with * before proceeding to the next step.');
+      }
+      
+      // Ensure completed steps don't include current step
+      setCompletedSteps(cleanedCompletedSteps);
       window.scrollTo(0, 0);
     }
   };
@@ -198,6 +331,9 @@ const ApplicationForm = () => {
   // Navigate to previous step
   const prevStep = () => {
     setValidationError('');
+    // Remove current step from completed steps when going back
+    const updatedCompletedSteps = completedSteps.filter(step => step !== currentStep);
+    setCompletedSteps(updatedCompletedSteps);
     setCurrentStep(currentStep - 1);
     window.scrollTo(0, 0);
   };
@@ -354,20 +490,20 @@ const ApplicationForm = () => {
                   {formSteps.map((step) => (
                     <div key={step.id} className="flex flex-col items-center mb-4 md:mb-0">
                       <div 
-                        className={`w-12 h-12 rounded-full flex items-center justify-center 
-                                   ${currentStep === step.id ? 'bg-[#2a85ff] text-white' : 
-                                     completedSteps.includes(step.id) ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}
+                        className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-200
+                                   ${currentStep === step.id ? 'bg-[#2a85ff] text-white border-[#2a85ff] shadow-lg' : 
+                                     completedSteps.includes(step.id) ? 'bg-green-500 text-white border-green-500' : 'bg-gray-100 text-gray-400 border-gray-200'}`}
                       >
                         {completedSteps.includes(step.id) ? (
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                           </svg>
                         ) : (
-                          step.id
+                          <span className="font-semibold">{step.id}</span>
                         )}
                       </div>
-                      <p className={`text-sm mt-2 text-center ${currentStep === step.id ? 'font-bold text-[#1d1d25]' : 
-                                   completedSteps.includes(step.id) ? 'font-medium text-gray-500' : 'text-gray-400'}`}>
+                      <p className={`text-sm mt-2 text-center transition-colors duration-200 ${currentStep === step.id ? 'font-bold text-[#1d1d25]' : 
+                                   completedSteps.includes(step.id) ? 'font-medium text-gray-600' : 'text-gray-400'}`}>
                         {step.title}
                       </p>
                     </div>
