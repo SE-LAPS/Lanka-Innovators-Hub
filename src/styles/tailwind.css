@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add animation for the slideshow */
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-100%);
+  }
+  55% {
+    transform: translateX(-100%);
+  }
+  60% {
+    transform: translateX(-200%);
+  }
+  85% {
+    transform: translateX(-200%);
+  }
+  90% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide {
+  animation: slide 20s infinite ease-in-out;
+}
+
 @layer base {
   :root {
     /* Global Colors */
