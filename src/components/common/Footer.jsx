@@ -143,7 +143,7 @@ const Footer = () => {
           {/* Bottom Section */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
             <p className="text-[14px] sm:text-[16px] font-medium text-[#808d9e] text-center sm:text-left">
-              ©2022 - Coca by Sans Design
+              ©2025 - <a href="https://techxdoz.com" target="_blank" rel="noopener noreferrer" className="text-[#2a85ff] hover:underline">TECHXDOZ</a> Design
             </p>
             
             <div className="flex items-center gap-4 sm:gap-6">
