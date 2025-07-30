@@ -92,6 +92,10 @@ const ApplicationForm = () => {
     updates: false,
   });
 
+  // Track current form step
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 7;
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -107,6 +111,18 @@ const ApplicationForm = () => {
   // Handle array field changes (checkbox groups)
   const handleArrayChange = (name, values) => {
     setFormData({ ...formData, [name]: values });
+  };
+
+  // Navigate to next step
+  const nextStep = () => {
+    setCurrentStep(currentStep + 1);
+    window.scrollTo(0, 0);
+  };
+
+  // Navigate to previous step
+  const prevStep = () => {
+    setCurrentStep(currentStep - 1);
+    window.scrollTo(0, 0);
   };
 
   // Handle form submission
@@ -171,6 +187,17 @@ const ApplicationForm = () => {
     { value: 'other', label: 'Other' },
     { value: 'none', label: 'No' },
   ];
+
+  // Form steps
+  const formSteps = [
+    { id: 1, title: 'APPLICANT DETAILS' },
+    { id: 2, title: 'YOUR STARTUP' },
+    { id: 3, title: 'YOUR SOLUTION AND IMPACT' },
+    { id: 4, title: 'MARKET, USERS & PROGRESS' },
+    { id: 5, title: 'THE TEAM' },
+    { id: 6, title: 'FUNDING & OWNERSHIP' },
+    { id: 7, title: 'FINAL QUESTIONS' },
+  ];
   
   return (
     <div className="w-full bg-white">
@@ -229,520 +256,593 @@ const ApplicationForm = () => {
       
       {/* Application Form */}
       <section className="w-full py-16">
-        <div className="w-full max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8">
-          <form onSubmit={handleSubmit} className="space-y-12">
-            
-            {/* Applicant Details */}
-            <FormSection title="APPLICANT DETAILS">
-              <Input
-                id="firstName"
-                label="First Name"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="lastName"
-                label="Last Name"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="jobTitle"
-                label="Job Title & Role in the Company"
-                value={formData.jobTitle}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="email"
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="phone"
-                label="Phone (+94)"
-                type="tel"
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-              />
-            </FormSection>
-            
-            {/* Startup Details */}
-            <FormSection title="YOUR STARTUP">
-              <Input
-                id="startupName"
-                label="Startup Name"
-                value={formData.startupName}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="website"
-                label="Website (if any)"
-                value={formData.website}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="description"
-                label="Briefly describe your startup and what you do (2 sentences max)"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="incorporationDate"
-                label="Year of Incorporation (DD-MM-YYYY)"
-                value={formData.incorporationDate}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="location"
-                label="Head Office Location (City/District)"
-                value={formData.location}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="registrationNumber"
-                label="Company Registration Number (BR/Reg ID)"
-                value={formData.registrationNumber}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <CheckboxGroup
-                name="industries"
-                label="Primary Industry (Select up to 3)"
-                options={industryOptions}
-                selectedValues={formData.industries}
-                onChange={(values) => handleArrayChange('industries', values)}
-                required
-              />
-              
-              <CheckboxGroup
-                name="clusters"
-                label="If relevant, which of our innovation clusters align with your startup?"
-                options={clusterOptions}
-                selectedValues={formData.clusters}
-                onChange={(values) => handleArrayChange('clusters', values)}
-              />
-              
-              <Input
-                id="pitchDeck"
-                label="Upload your pitch deck (share link)"
-                value={formData.pitchDeck}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="videoPitch"
-                label="3-minute video pitch link (optional)"
-                value={formData.videoPitch}
-                onChange={handleInputChange}
-              />
-            </FormSection>
-            
-            {/* Solution and Impact */}
-            <FormSection title="YOUR SOLUTION AND IMPACT">
-              <Textarea
-                id="problem"
-                label="What problem is your startup solving? Why is it important? Who faces this issue?"
-                value={formData.problem}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="uniqueness"
-                label="What's unique about your solution or product?"
-                value={formData.uniqueness}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="idea"
-                label="How did the idea come about? What's your approach to solving the problem?"
-                value={formData.idea}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="developmentStatus"
-                label="What is the current status of your product development? What Technology Readiness Level (TRL) applies?"
-                value={formData.developmentStatus}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="impact"
-                label="What impact do you aim to make socially, economically, or environmentally? How will you measure it?"
-                value={formData.impact}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="future"
-                label="In what way does your innovation help shape a better future?"
-                value={formData.future}
-                onChange={handleInputChange}
-              />
-              
-              <CheckboxGroup
-                name="sdgs"
-                label="Which Sustainable Development Goals (SDGs) does your work directly impact (up to 3)?"
-                options={sdgOptions}
-                selectedValues={formData.sdgs}
-                onChange={(values) => handleArrayChange('sdgs', values)}
-              />
-              
-              <Textarea
-                id="academicResearch"
-                label="Is your innovation backed by academic research? If yes, which institution(s)?"
-                value={formData.academicResearch}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="intellectualProperty"
-                label="Do you hold any intellectual property or patents? Describe your IP strategy and how you maintain a competitive edge. Have you explored freedom-to-operate or any regulatory requirements?"
-                value={formData.intellectualProperty}
-                onChange={handleInputChange}
-              />
-            </FormSection>
-            
-            {/* Market, Users & Progress */}
-            <FormSection title="MARKET, USERS & PROGRESS">
-              <Input
-                id="mvpLaunchDate"
-                label="MVP (Minimum Viable Product) Launch Date (DD-MM-YYYY)"
-                value={formData.mvpLaunchDate}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="targetCustomers"
-                label="Who are your target customers? What is the estimated size of your market?"
-                value={formData.targetCustomers}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="traction"
-                label="Describe any sales, pilots, or traction so far."
-                value={formData.traction}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="revenueModel"
-                label="Revenue model – how do you make or plan to make money? Do you have paying customers? If yes, who and how much revenue?"
-                value={formData.revenueModel}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="competitors"
-                label="Who are your major competitors? What gives your solution a clear advantage?"
-                value={formData.competitors}
-                onChange={handleInputChange}
-                required
-              />
-            </FormSection>
-            
-            {/* Team */}
-            <FormSection title="THE TEAM">
-              <Textarea
-                id="teamInfo"
-                label="Tell us about your team: names, roles, time commitment, experience, and expertise. Who are the co-founders? Who handles business development vs. tech?"
-                value={formData.teamInfo}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="linkedInProfiles"
-                label="Share LinkedIn profiles of all co-founders."
-                value={formData.linkedInProfiles}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="teamFit"
-                label="Why is your team a strong fit? How long have you worked together? What motivates you as a group?"
-                value={formData.teamFit}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="founderExperience"
-                label="Are you first-time founders or do you have previous startup experience? Please share briefly."
-                value={formData.founderExperience}
-                onChange={handleInputChange}
-              />
-              
-              <Input
-                id="totalCoFounders"
-                label="Total number of co-founders"
-                value={formData.totalCoFounders}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="femaleFounders"
-                label="Female founders"
-                value={formData.femaleFounders}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="maleFounders"
-                label="Male founders"
-                value={formData.maleFounders}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="nonBinaryFounders"
-                label="Non-binary founders"
-                value={formData.nonBinaryFounders}
-                onChange={handleInputChange}
-                required
-              />
-            </FormSection>
-            
-            {/* Funding & Ownership */}
-            <FormSection title="FUNDING & OWNERSHIP">
-              <Textarea
-                id="ownershipStructure"
-                label="Ownership structure (cap table) – who owns what?"
-                value={formData.ownershipStructure}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Input
-                id="coFoundersOwnership"
-                label="Co-founders' combined ownership (%)"
-                value={formData.coFoundersOwnership}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="equityFunding"
-                label="Have you raised any equity funding before? From whom, when, and at what valuation?"
-                value={formData.equityFunding}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="nonEquityFunding"
-                label="Any non-equity funding (e.g., grants, awards)? From whom and how much?"
-                value={formData.nonEquityFunding}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <div className="mb-6">
-                <p className="block text-sm font-medium text-[#1d1d25] mb-3">
-                  Are you currently seeking investment? <span className="text-red-500">*</span>
-                </p>
-                
-                <div className="space-y-2">
-                  <Radio
-                    id="seekingInvestment-yes"
-                    name="seekingInvestment"
-                    value="yes"
-                    checked={formData.seekingInvestment === 'yes'}
-                    onChange={handleInputChange}
-                    label="Yes"
-                  />
-                  
-                  <Radio
-                    id="seekingInvestment-no"
-                    name="seekingInvestment"
-                    value="no"
-                    checked={formData.seekingInvestment === 'no'}
-                    onChange={handleInputChange}
-                    label="No"
-                  />
+        <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            {/* Progress Bar (Top Center) */}
+            <div className="w-full mb-8">
+              <div className="bg-white p-6 rounded-lg border border-[#e9ecf2]">
+                <h3 className="text-lg font-bold mb-6 text-[#1d1d25] text-center">Application Progress</h3>
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                  {formSteps.map((step) => (
+                    <div key={step.id} className="flex flex-col items-center mb-4 md:mb-0">
+                      <div 
+                        className={`w-12 h-12 rounded-full flex items-center justify-center 
+                                   ${currentStep === step.id ? 'bg-[#2a85ff] text-white' : 
+                                     currentStep > step.id ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}
+                      >
+                        {currentStep > step.id ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        ) : (
+                          step.id
+                        )}
+                      </div>
+                      <p className={`text-sm mt-2 text-center ${currentStep === step.id ? 'font-bold text-[#1d1d25]' : 
+                                   currentStep > step.id ? 'font-medium text-gray-500' : 'text-gray-400'}`}>
+                        {step.title}
+                      </p>
+                    </div>
+                  ))}
+
+                  {/* Removed connecting lines between steps */}
                 </div>
-              </div>
-              
-              <Input
-                id="runway"
-                label="Current runway (in months)"
-                value={formData.runway}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <div className="mb-6">
-                <p className="block text-sm font-medium text-[#1d1d25] mb-3">
-                  Would you like to be considered for a potential investment from Lanka Seed Capital? <span className="text-red-500">*</span>
-                </p>
-                
-                <div className="space-y-2">
-                  <Radio
-                    id="seedCapital-yes"
-                    name="seedCapital"
-                    value="yes"
-                    checked={formData.seedCapital === 'yes'}
-                    onChange={handleInputChange}
-                    label="Yes"
-                  />
-                  
-                  <Radio
-                    id="seedCapital-no"
-                    name="seedCapital"
-                    value="no"
-                    checked={formData.seedCapital === 'no'}
-                    onChange={handleInputChange}
-                    label="No"
-                  />
-                </div>
-              </div>
-            </FormSection>
-            
-            {/* Final Questions */}
-            <FormSection title="FINAL QUESTIONS">
-              <div className="mb-6">
-                <p className="block text-sm font-medium text-[#1d1d25] mb-3">
-                  May we share your pitch deck with trusted advisors in our network for feedback? <span className="text-red-500">*</span>
-                </p>
-                
-                <div className="space-y-2">
-                  <Radio
-                    id="shareData-yes"
-                    name="shareData"
-                    value="yes"
-                    checked={formData.shareData === 'yes'}
-                    onChange={handleInputChange}
-                    label="Yes"
-                  />
-                  
-                  <Radio
-                    id="shareData-no"
-                    name="shareData"
-                    value="no"
-                    checked={formData.shareData === 'no'}
-                    onChange={handleInputChange}
-                    label="No"
-                  />
-                </div>
-              </div>
-              
-              <Input
-                id="heardFrom"
-                label="How did you hear about Lanka Innovators Hub?"
-                value={formData.heardFrom}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <Textarea
-                id="programExpectations"
-                label="What do you hope to gain from joining our Core program?"
-                value={formData.programExpectations}
-                onChange={handleInputChange}
-                required
-              />
-              
-              <CheckboxGroup
-                name="previousSupport"
-                label="Have you received any support from us previously? (select all that apply)"
-                options={supportOptions}
-                selectedValues={formData.previousSupport}
-                onChange={(values) => handleArrayChange('previousSupport', values)}
-              />
-              
-              <Input
-                id="teamMet"
-                label="Have you already met with anyone on our team? If yes, who?"
-                value={formData.teamMet}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="otherPrograms"
-                label="Have you taken part in any other startup accelerator or incubator before? Please list them and when."
-                value={formData.otherPrograms}
-                onChange={handleInputChange}
-              />
-              
-              <Textarea
-                id="additionalInfo"
-                label="Anything else you'd like to tell us?"
-                value={formData.additionalInfo}
-                onChange={handleInputChange}
-              />
-            </FormSection>
-            
-            {/* Data Consent */}
-            <div className="bg-gray-50 p-6 rounded-lg border border-[#e9ecf2]">
-              <h3 className="font-bold text-lg mb-4">Data Consent and Privacy Notice</h3>
-              
-              <p className="text-sm mb-6">
-                By submitting this form, you consent to Lanka Innovators Hub collecting and processing your data solely for the purpose of evaluating your application and engaging you in our programs and services. You may opt out of further communication at any time.
-              </p>
-              
-              <div className="space-y-4">
-                <Checkbox
-                  id="dataConsent"
-                  name="dataConsent"
-                  checked={formData.dataConsent}
-                  onChange={handleCheckboxChange}
-                  label="I consent to Lanka Innovators Hub contacting me and handling my personal data for these purposes."
-                />
-                
-                <Checkbox
-                  id="updates"
-                  name="updates"
-                  checked={formData.updates}
-                  onChange={handleCheckboxChange}
-                  label="I agree to receive occasional updates and relevant opportunities from Lanka Innovators Hub."
-                />
               </div>
             </div>
-            
-            {/* Submit Button */}
-            <div className="flex justify-center pt-6">
-              <Button
-                type="submit"
-                variant="primary"
-                size="large"
-                disabled={!formData.dataConsent}
-                className="w-full max-w-md"
-              >
-                Submit Application
-              </Button>
+
+            {/* Form Content */}
+            <div className="w-full">
+              {/* Step 1: Applicant Details */}
+              {currentStep === 1 && (
+                <FormSection title="APPLICANT DETAILS">
+                  <Input
+                    id="firstName"
+                    label="First Name"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="lastName"
+                    label="Last Name"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="jobTitle"
+                    label="Job Title & Role in the Company"
+                    value={formData.jobTitle}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="email"
+                    label="Email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="phone"
+                    label="Phone (+94)"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </FormSection>
+              )}
+              
+              {/* Step 2: Startup Details */}
+              {currentStep === 2 && (
+                <FormSection title="YOUR STARTUP">
+                  <Input
+                    id="startupName"
+                    label="Startup Name"
+                    value={formData.startupName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="website"
+                    label="Website (if any)"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="description"
+                    label="Briefly describe your startup and what you do (2 sentences max)"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="incorporationDate"
+                    label="Year of Incorporation (DD-MM-YYYY)"
+                    value={formData.incorporationDate}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="location"
+                    label="Head Office Location (City/District)"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="registrationNumber"
+                    label="Company Registration Number (BR/Reg ID)"
+                    value={formData.registrationNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <CheckboxGroup
+                    name="industries"
+                    label="Primary Industry (Select up to 3)"
+                    options={industryOptions}
+                    selectedValues={formData.industries}
+                    onChange={(values) => handleArrayChange('industries', values)}
+                    required
+                  />
+                  
+                  <CheckboxGroup
+                    name="clusters"
+                    label="If relevant, which of our innovation clusters align with your startup?"
+                    options={clusterOptions}
+                    selectedValues={formData.clusters}
+                    onChange={(values) => handleArrayChange('clusters', values)}
+                  />
+                  
+                  <Input
+                    id="pitchDeck"
+                    label="Upload your pitch deck (share link)"
+                    value={formData.pitchDeck}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="videoPitch"
+                    label="3-minute video pitch link (optional)"
+                    value={formData.videoPitch}
+                    onChange={handleInputChange}
+                  />
+                </FormSection>
+              )}
+              
+              {/* Step 3: Solution and Impact */}
+              {currentStep === 3 && (
+                <FormSection title="YOUR SOLUTION AND IMPACT">
+                  <Textarea
+                    id="problem"
+                    label="What problem is your startup solving? Why is it important? Who faces this issue?"
+                    value={formData.problem}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="uniqueness"
+                    label="What's unique about your solution or product?"
+                    value={formData.uniqueness}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="idea"
+                    label="How did the idea come about? What's your approach to solving the problem?"
+                    value={formData.idea}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="developmentStatus"
+                    label="What is the current status of your product development? What Technology Readiness Level (TRL) applies?"
+                    value={formData.developmentStatus}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="impact"
+                    label="What impact do you aim to make socially, economically, or environmentally? How will you measure it?"
+                    value={formData.impact}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="future"
+                    label="In what way does your innovation help shape a better future?"
+                    value={formData.future}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <CheckboxGroup
+                    name="sdgs"
+                    label="Which Sustainable Development Goals (SDGs) does your work directly impact (up to 3)?"
+                    options={sdgOptions}
+                    selectedValues={formData.sdgs}
+                    onChange={(values) => handleArrayChange('sdgs', values)}
+                  />
+                  
+                  <Textarea
+                    id="academicResearch"
+                    label="Is your innovation backed by academic research? If yes, which institution(s)?"
+                    value={formData.academicResearch}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="intellectualProperty"
+                    label="Do you hold any intellectual property or patents? Describe your IP strategy and how you maintain a competitive edge. Have you explored freedom-to-operate or any regulatory requirements?"
+                    value={formData.intellectualProperty}
+                    onChange={handleInputChange}
+                  />
+                </FormSection>
+              )}
+              
+              {/* Step 4: Market, Users & Progress */}
+              {currentStep === 4 && (
+                <FormSection title="MARKET, USERS & PROGRESS">
+                  <Input
+                    id="mvpLaunchDate"
+                    label="MVP (Minimum Viable Product) Launch Date (DD-MM-YYYY)"
+                    value={formData.mvpLaunchDate}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="targetCustomers"
+                    label="Who are your target customers? What is the estimated size of your market?"
+                    value={formData.targetCustomers}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="traction"
+                    label="Describe any sales, pilots, or traction so far."
+                    value={formData.traction}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="revenueModel"
+                    label="Revenue model – how do you make or plan to make money? Do you have paying customers? If yes, who and how much revenue?"
+                    value={formData.revenueModel}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="competitors"
+                    label="Who are your major competitors? What gives your solution a clear advantage?"
+                    value={formData.competitors}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </FormSection>
+              )}
+              
+              {/* Step 5: Team */}
+              {currentStep === 5 && (
+                <FormSection title="THE TEAM">
+                  <Textarea
+                    id="teamInfo"
+                    label="Tell us about your team: names, roles, time commitment, experience, and expertise. Who are the co-founders? Who handles business development vs. tech?"
+                    value={formData.teamInfo}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="linkedInProfiles"
+                    label="Share LinkedIn profiles of all co-founders."
+                    value={formData.linkedInProfiles}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="teamFit"
+                    label="Why is your team a strong fit? How long have you worked together? What motivates you as a group?"
+                    value={formData.teamFit}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Textarea
+                    id="founderExperience"
+                    label="Are you first-time founders or do you have previous startup experience? Please share briefly."
+                    value={formData.founderExperience}
+                    onChange={handleInputChange}
+                  />
+                  
+                  <Input
+                    id="totalCoFounders"
+                    label="Total number of co-founders"
+                    value={formData.totalCoFounders}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="femaleFounders"
+                    label="Female founders"
+                    value={formData.femaleFounders}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="maleFounders"
+                    label="Male founders"
+                    value={formData.maleFounders}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="nonBinaryFounders"
+                    label="Non-binary founders"
+                    value={formData.nonBinaryFounders}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </FormSection>
+              )}
+              
+              {/* Step 6: Funding & Ownership */}
+              {currentStep === 6 && (
+                <FormSection title="FUNDING & OWNERSHIP">
+                  <Textarea
+                    id="ownershipStructure"
+                    label="Ownership structure (cap table) – who owns what?"
+                    value={formData.ownershipStructure}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Input
+                    id="coFoundersOwnership"
+                    label="Co-founders' combined ownership (%)"
+                    value={formData.coFoundersOwnership}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="equityFunding"
+                    label="Have you raised any equity funding before? From whom, when, and at what valuation?"
+                    value={formData.equityFunding}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <Textarea
+                    id="nonEquityFunding"
+                    label="Any non-equity funding (e.g., grants, awards)? From whom and how much?"
+                    value={formData.nonEquityFunding}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <div className="mb-6">
+                    <p className="block text-sm font-medium text-[#1d1d25] mb-3">
+                      Are you currently seeking investment? <span className="text-red-500">*</span>
+                    </p>
+                    
+                    <div className="space-y-2">
+                      <Radio
+                        id="seekingInvestment-yes"
+                        name="seekingInvestment"
+                        value="yes"
+                        checked={formData.seekingInvestment === 'yes'}
+                        onChange={handleInputChange}
+                        label="Yes"
+                      />
+                      
+                      <Radio
+                        id="seekingInvestment-no"
+                        name="seekingInvestment"
+                        value="no"
+                        checked={formData.seekingInvestment === 'no'}
+                        onChange={handleInputChange}
+                        label="No"
+                      />
+                    </div>
+                  </div>
+                  
+                  <Input
+                    id="runway"
+                    label="Current runway (in months)"
+                    value={formData.runway}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  
+                  <div className="mb-6">
+                    <p className="block text-sm font-medium text-[#1d1d25] mb-3">
+                      Would you like to be considered for a potential investment from Lanka Seed Capital? <span className="text-red-500">*</span>
+                    </p>
+                    
+                    <div className="space-y-2">
+                      <Radio
+                        id="seedCapital-yes"
+                        name="seedCapital"
+                        value="yes"
+                        checked={formData.seedCapital === 'yes'}
+                        onChange={handleInputChange}
+                        label="Yes"
+                      />
+                      
+                      <Radio
+                        id="seedCapital-no"
+                        name="seedCapital"
+                        value="no"
+                        checked={formData.seedCapital === 'no'}
+                        onChange={handleInputChange}
+                        label="No"
+                      />
+                    </div>
+                  </div>
+                </FormSection>
+              )}
+              
+              {/* Step 7: Final Questions */}
+              {currentStep === 7 && (
+                <>
+                  <FormSection title="FINAL QUESTIONS">
+                    <div className="mb-6">
+                      <p className="block text-sm font-medium text-[#1d1d25] mb-3">
+                        May we share your pitch deck with trusted advisors in our network for feedback? <span className="text-red-500">*</span>
+                      </p>
+                      
+                      <div className="space-y-2">
+                        <Radio
+                          id="shareData-yes"
+                          name="shareData"
+                          value="yes"
+                          checked={formData.shareData === 'yes'}
+                          onChange={handleInputChange}
+                          label="Yes"
+                        />
+                        
+                        <Radio
+                          id="shareData-no"
+                          name="shareData"
+                          value="no"
+                          checked={formData.shareData === 'no'}
+                          onChange={handleInputChange}
+                          label="No"
+                        />
+                      </div>
+                    </div>
+                    
+                    <Input
+                      id="heardFrom"
+                      label="How did you hear about Lanka Innovators Hub?"
+                      value={formData.heardFrom}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    
+                    <Textarea
+                      id="programExpectations"
+                      label="What do you hope to gain from joining our Core program?"
+                      value={formData.programExpectations}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    
+                    <CheckboxGroup
+                      name="previousSupport"
+                      label="Have you received any support from us previously? (select all that apply)"
+                      options={supportOptions}
+                      selectedValues={formData.previousSupport}
+                      onChange={(values) => handleArrayChange('previousSupport', values)}
+                    />
+                    
+                    <Input
+                      id="teamMet"
+                      label="Have you already met with anyone on our team? If yes, who?"
+                      value={formData.teamMet}
+                      onChange={handleInputChange}
+                    />
+                    
+                    <Textarea
+                      id="otherPrograms"
+                      label="Have you taken part in any other startup accelerator or incubator before? Please list them and when."
+                      value={formData.otherPrograms}
+                      onChange={handleInputChange}
+                    />
+                    
+                    <Textarea
+                      id="additionalInfo"
+                      label="Anything else you'd like to tell us?"
+                      value={formData.additionalInfo}
+                      onChange={handleInputChange}
+                    />
+                  </FormSection>
+                  
+                  {/* Data Consent */}
+                  <div className="bg-gray-50 p-6 rounded-lg border border-[#e9ecf2] mt-8">
+                    <h3 className="font-bold text-lg mb-4">Data Consent and Privacy Notice</h3>
+                    
+                    <p className="text-sm mb-6">
+                      By submitting this form, you consent to Lanka Innovators Hub collecting and processing your data solely for the purpose of evaluating your application and engaging you in our programs and services. You may opt out of further communication at any time.
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <Checkbox
+                        id="dataConsent"
+                        name="dataConsent"
+                        checked={formData.dataConsent}
+                        onChange={handleCheckboxChange}
+                        label="I consent to Lanka Innovators Hub contacting me and handling my personal data for these purposes."
+                      />
+                      
+                      <Checkbox
+                        id="updates"
+                        name="updates"
+                        checked={formData.updates}
+                        onChange={handleCheckboxChange}
+                        label="I agree to receive occasional updates and relevant opportunities from Lanka Innovators Hub."
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              {/* Navigation Buttons */}
+              <div className="mt-8 flex justify-between">
+                {currentStep > 1 ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                    className="min-w-[120px]"
+                  >
+                    Previous
+                  </Button>
+                ) : (
+                  <div></div>
+                )}
+                
+                {currentStep < totalSteps ? (
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={nextStep}
+                    className="min-w-[120px]"
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={!formData.dataConsent}
+                    className="min-w-[160px]"
+                  >
+                    Submit Application
+                  </Button>
+                )}
+              </div>
             </div>
           </form>
         </div>
