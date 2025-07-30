@@ -9,20 +9,20 @@ const PricingPage = () => {
   const pricingPlans = [
     {
       id: 'silver',
-      name: 'SILVER',
-      price: '$50',
+      name: 'STARTUP',
+      price: 'Rs. 30,000',
       period: '/month',
       features: [
-        'No Discount',
-        'Basic Support',
-        'Ads Banner Free',
-        'Design Style',
-        'Component Library',
-        'All limited links',
-        'Own analytics platform',
-        'Chat support',
-        'Optimize hashtags',
-        'Unlimited users'
+        'Shared Workspace Access',
+        'Basic Mentorship',
+        'Networking Events',
+        'Business Planning Support',
+        'Community Resources',
+        'Weekly Check-ins',
+        'Basic Market Research',
+        'Pitch Deck Review',
+        'Digital Marketing Support',
+        'Startup Workshop Access'
       ],
       buttonText: 'Choose plan',
       buttonVariant: 'secondary',
@@ -33,20 +33,20 @@ const PricingPage = () => {
     },
     {
       id: 'gold',
-      name: 'GOLD',
-      price: '$100',
+      name: 'GROWTH',
+      price: 'Rs. 75,000',
       period: '/month',
       features: [
-        'No Discount',
-        'Basic Support',
-        'Ads Banner Free',
-        'Design Style',
-        'Component Library',
-        'All limited links',
-        'Own analytics platform',
-        'Chat support',
-        'Optimize hashtags',
-        'Unlimited users'
+        'Private Office Space',
+        'Dedicated Mentors',
+        'Investor Introductions',
+        'Business Model Validation',
+        'Market Strategy Development',
+        'Funding Preparation Support',
+        'Legal & Accounting Advisory',
+        'Marketing & PR Assistance',
+        'Technical Resources Access',
+        'Priority Workshop Enrollment'
       ],
       buttonText: 'Choose plan',
       buttonVariant: 'primary',
@@ -57,20 +57,20 @@ const PricingPage = () => {
     },
     {
       id: 'premium',
-      name: 'PREMIUM',
-      price: '$150',
+      name: 'SCALE',
+      price: 'Rs. 150,000',
       period: '/month',
       features: [
-        'No Discount',
-        'Basic Support',
-        'Ads Banner Free',
-        'Design Style',
-        'Component Library',
-        'All limited links',
-        'Own analytics platform',
-        'Chat support',
-        'Optimize hashtags',
-        'Unlimited users'
+        'Executive Office Suite',
+        'Strategic Advisory Board',
+        'Direct Investor Access',
+        'International Market Entry',
+        'Corporate Partnership Intro',
+        'Government Relations Support',
+        'Export Market Development',
+        'Media & PR Campaigns',
+        'Technology Transfer Support',
+        'Board Seat for Key Decisions'
       ],
       buttonText: 'Choose plan',
       buttonVariant: 'secondary',
@@ -86,22 +86,22 @@ const PricingPage = () => {
       id: 1,
       icon: '/images/img_ic_simple.svg',
       iconBg: 'bg-[#b5e4ca]',
-      title: 'Simple & Unique',
-      description: 'Created by our talented designer'
+      title: 'Application & Selection',
+      description: 'Apply online and go through our selection process'
     },
     {
       id: 2,
       icon: '/images/img_ic_layered.svg',
       iconBg: 'bg-[#ffbc99]',
-      title: 'Layered Well & Documented',
-      description: 'We are not tolerant about taste'
+      title: 'Onboarding & Planning',
+      description: 'Get matched with mentors and create your roadmap'
     },
     {
       id: 3,
       icon: '/images/img_jet_plane_right.svg',
       iconBg: 'bg-[#cabdfe]',
-      title: 'World Class UI Design',
-      description: 'We are not tolerant about taste'
+      title: 'Growth & Acceleration',
+      description: 'Execute your plan with ongoing support and resources'
     }
   ];
 
@@ -130,10 +130,10 @@ const PricingPage = () => {
               >
                 <div className="max-w-[526px] mx-auto">
                   <h1 className="text-[30px] sm:text-[45px] lg:text-[60px] font-bold font-dm-sans leading-tight text-[#221c4e] mb-4">
-                    Pricing Plans
+                    Program Packages
                   </h1>
                   <p className="text-[14px] sm:text-[15px] lg:text-[16px] font-medium font-dm-sans leading-relaxed text-[#808d9e]">
-                    Coca landing page UI Kit no credit card required. All plans come with a free, 14 day trial of our Premium features.
+                    Choose the right program package for your startup's current stage. All plans include access to our core resources and community network.
                   </p>
                 </div>
               </div>
@@ -257,10 +257,10 @@ const PricingPage = () => {
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <p className="text-[12px] sm:text-[14px] font-bold font-dm-sans text-[#82be6d] mb-2">
-              HOW IT WORK
+              OUR PROCESS
             </p>
             <h2 className="text-[36px] sm:text-[48px] lg:text-[60px] font-bold font-dm-sans text-[#1d1d25] leading-tight">
-              How Coca Work
+              How We Support Your Journey
             </h2>
           </div>
 
@@ -298,19 +298,19 @@ const PricingPage = () => {
               {/* Right Side - CTA */}
               <div className="text-center lg:text-left">
                 <h3 className="text-[32px] sm:text-[40px] lg:text-[48px] font-bold font-dm-sans text-[#1d1d25] leading-tight mb-6 sm:mb-8">
-                  Start custom & build!
+                  Join Sri Lanka's leading startup hub!
                 </h3>
                 <p className="text-[14px] sm:text-[16px] font-medium font-dm-sans text-[#1d1d25] leading-relaxed mb-8 sm:mb-12 lg:mb-16">
-                  Nunc et tellus non erat accumsan aliquam eget non mi. Integer fringilla pellentesque finibus.
+                  We've helped over 80 startups grow and secure funding. Our network includes top mentors, investors, and industry leaders across Sri Lanka and beyond.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                   <div className="text-center sm:text-left">
                     <p className="text-[20px] sm:text-[24px] font-bold font-dm-sans text-[#1d1d25] mb-1">
-                      Only $50
+                      Start at Rs. 30,000
                     </p>
                     <p className="text-[12px] sm:text-[14px] font-normal font-dm-sans text-[#808d9e]">
-                      for Silver package
+                      for the Startup package
                     </p>
                   </div>
                   <Button
@@ -334,10 +334,10 @@ const PricingPage = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
               <div className="text-center lg:text-left flex-1">
                 <p className="text-[24px] sm:text-[30px] lg:text-[36px] font-bold font-dm-sans text-[#ffffff7f] mb-2">
-                  Ready to collaborate?
+                  Ready to grow your startup?
                 </p>
                 <h2 className="text-[36px] sm:text-[48px] lg:text-[60px] font-bold font-dm-sans text-white leading-tight">
-                  Start your free trial today!
+                  Apply to Lanka Innovators Hub today!
                 </h2>
               </div>
               <div className="flex-shrink-0">
