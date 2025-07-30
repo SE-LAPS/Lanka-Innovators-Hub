@@ -92,11 +92,3 @@ Build the application for production:
 ```bash
 npm run build
 ```
-
-## 🙏 Acknowledgments
-
-- Built with [TECHXDOZ](https://techxdoz.com/)
-- Powered by React and Vite
-- Styled with Tailwind CSS
-
-Built with ❤️ on TECHXDOZ
