@@ -96,6 +96,12 @@ const ApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 7;
 
+  // Track completed steps
+  const [completedSteps, setCompletedSteps] = useState([]);
+
+  // Track validation errors
+  const [validationError, setValidationError] = useState('');
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -113,14 +119,85 @@ const ApplicationForm = () => {
     setFormData({ ...formData, [name]: values });
   };
 
+  // Validation functions for each step
+  const validateStep = (stepNumber) => {
+    switch (stepNumber) {
+      case 1: // Applicant Details
+        return formData.firstName.trim() !== '' && 
+               formData.lastName.trim() !== '' && 
+               formData.jobTitle.trim() !== '' && 
+               formData.email.trim() !== '' && 
+               formData.phone.trim() !== '';
+      
+      case 2: // Your Startup
+        return formData.startupName.trim() !== '' && 
+               formData.description.trim() !== '' && 
+               formData.incorporationDate.trim() !== '' && 
+               formData.location.trim() !== '' && 
+               formData.registrationNumber.trim() !== '' && 
+               formData.industries.length > 0 && 
+               formData.pitchDeck.trim() !== '';
+      
+      case 3: // Your Solution and Impact
+        return formData.problem.trim() !== '' && 
+               formData.uniqueness.trim() !== '' && 
+               formData.idea.trim() !== '';
+      
+      case 4: // Market, Users & Progress
+        return formData.mvpLaunchDate.trim() !== '' && 
+               formData.targetCustomers.trim() !== '' && 
+               formData.traction.trim() !== '' && 
+               formData.revenueModel.trim() !== '' && 
+               formData.competitors.trim() !== '';
+      
+      case 5: // The Team
+        return formData.teamInfo.trim() !== '' && 
+               formData.totalCoFounders.trim() !== '' && 
+               formData.femaleFounders.trim() !== '' && 
+               formData.maleFounders.trim() !== '' && 
+               formData.nonBinaryFounders.trim() !== '';
+      
+      case 6: // Funding & Ownership
+        return formData.ownershipStructure.trim() !== '' && 
+               formData.coFoundersOwnership.trim() !== '' && 
+               formData.equityFunding.trim() !== '' && 
+               formData.nonEquityFunding.trim() !== '' && 
+               formData.seekingInvestment.trim() !== '' && 
+               formData.runway.trim() !== '' && 
+               formData.seedCapital.trim() !== '';
+      
+      case 7: // Final Questions
+        return formData.shareData.trim() !== '' && 
+               formData.heardFrom.trim() !== '' && 
+               formData.programExpectations.trim() !== '' &&
+               formData.dataConsent === true;
+      
+      default:
+        return false;
+    }
+  };
+
   // Navigate to next step
   const nextStep = () => {
-    setCurrentStep(currentStep + 1);
-    window.scrollTo(0, 0);
+    if (validateStep(currentStep)) {
+      // Clear any validation errors
+      setValidationError('');
+      // Mark current step as completed
+      if (!completedSteps.includes(currentStep)) {
+        setCompletedSteps([...completedSteps, currentStep]);
+      }
+      setCurrentStep(currentStep + 1);
+      window.scrollTo(0, 0);
+    } else {
+      // Show validation error
+      setValidationError('Please fill in all required fields marked with * before proceeding to the next step.');
+      window.scrollTo(0, 0);
+    }
   };
 
   // Navigate to previous step
   const prevStep = () => {
+    setValidationError('');
     setCurrentStep(currentStep - 1);
     window.scrollTo(0, 0);
   };
@@ -128,10 +205,21 @@ const ApplicationForm = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
     
-    // In a real app, you'd send this data to your backend
-    alert("Application submitted successfully! We'll be in touch soon.");
+    if (validateStep(7)) {
+      // Mark final step as completed
+      if (!completedSteps.includes(7)) {
+        setCompletedSteps([...completedSteps, 7]);
+      }
+      setValidationError('');
+      console.log("Form submitted:", formData);
+      
+      // In a real app, you'd send this data to your backend
+      alert("Application submitted successfully! We'll be in touch soon.");
+    } else {
+      setValidationError('Please fill in all required fields and accept the data consent before submitting.');
+      window.scrollTo(0, 0);
+    }
   };
 
   // Industry options
@@ -268,9 +356,9 @@ const ApplicationForm = () => {
                       <div 
                         className={`w-12 h-12 rounded-full flex items-center justify-center 
                                    ${currentStep === step.id ? 'bg-[#2a85ff] text-white' : 
-                                     currentStep > step.id ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}
+                                     completedSteps.includes(step.id) ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'}`}
                       >
-                        {currentStep > step.id ? (
+                        {completedSteps.includes(step.id) ? (
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                           </svg>
@@ -279,7 +367,7 @@ const ApplicationForm = () => {
                         )}
                       </div>
                       <p className={`text-sm mt-2 text-center ${currentStep === step.id ? 'font-bold text-[#1d1d25]' : 
-                                   currentStep > step.id ? 'font-medium text-gray-500' : 'text-gray-400'}`}>
+                                   completedSteps.includes(step.id) ? 'font-medium text-gray-500' : 'text-gray-400'}`}>
                         {step.title}
                       </p>
                     </div>
@@ -808,6 +896,18 @@ const ApplicationForm = () => {
                 </>
               )}
               
+              {/* Validation Error Message */}
+              {validationError && (
+                <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center">
+                    <svg className="w-5 h-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-red-700 text-sm font-medium">{validationError}</p>
+                  </div>
+                </div>
+              )}
+              
               {/* Navigation Buttons */}
               <div className="mt-8 flex justify-between">
                 {currentStep > 1 ? (
@@ -836,7 +936,6 @@ const ApplicationForm = () => {
                   <Button
                     type="submit"
                     variant="primary"
-                    disabled={!formData.dataConsent}
                     className="min-w-[160px]"
                   >
                     Submit Application
